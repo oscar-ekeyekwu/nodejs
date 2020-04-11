@@ -1,9 +1,11 @@
 //Modules and Export
-var counter = require("./count");
+var stuff = require('./stuff');
 /**
- * here you assign the exported module to a 
+ * here you assign the exported module to a
  * variable, so you can use it where it is
  * required
  */
- var count = counter(["Oscar", "Ikechukwu"]);
- console.log(count)
+
+console.log(stuff.counter(['Oscar', 'Ikechukwu']));
+console.log(stuff.adder(5, 8));
+console.log(stuff.pi);
