@@ -1,38 +1,28 @@
-//Modules and Export
-var events = require('events');
-var util = require('util');
+//reading and writng files
+var fs = require('fs');
+
 /**
- * here you assign the exported module to a
- * variable, so you can use it where it is
- * required
+ * reading and writing file synchronously
+ *  will block succeeding code thus codes
+ *  after these fucntions will not run
+ * until the reading or writing is done
  */
+var readme = fs.readFileSync('README.md', 'utf8');
 
-var myEmitter = new events.EventEmitter();
-var Person = function (name) {
-  this.name = name;
-};
+fs.writeFileSync('writeme.txt', readme);
 
-//makig the person constructor to inherit the events.Emitter
-util.inherits(Person, events.EventEmitter);
+//readig and writing asynchronously
+fs.readFile('README.md', 'utf8', function (err, data) {
+  //syntax-> fs.readfile(filepath,char encoding,callback);
+  //here, the data argument carries the contents of the file read.
 
-var james = new Person('james');
-var mary = new Person('mary');
-var ryu = new Person('ryu');
-
-var people = [james, mary, ryu];
-
-//loop throught the people array created and assign the evennts
-people.forEach(function (person) {
-  person.on('speak', function (msg) {
-    console.log(person.name + ' said: ' + msg);
+  /**in writing file asynchronously, one must add a callback
+   * to log errors if any exit. Discovered this in practice.
+   * syntax -> fs.writefile(filepath,data,callback);
+   */
+  fs.writeFile('newWrite.txt', data, function (err) {
+    if (!err) {
+      console.log('File written and saved');
+    }
   });
 });
-//add the event emitter to the instance of the emitter constructor
-myEmitter.on('someEvent', function (msg) {
-  console.log(msg);
-});
-
-//emit the event more like a trigger for the event emitter
-myEmitter.emit('someEvent', 'the event was fired');
-james.emit('speak', 'hello people');
-ryu.emit('speak', 'good day neighbours');
